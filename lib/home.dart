@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,8 +29,11 @@ class _HomePageState extends State<HomePage> {
       );
     } else {
       // ignore: use_build_context_synchronously
-      ScaffoldMessenger.of(context)
-          .showSnackBar(const SnackBar(content: Text('Nothing is selected')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Nothing is selected'),
+        ),
+      );
     }
   }
 
@@ -82,26 +84,24 @@ class _HomePageState extends State<HomePage> {
                           crossAxisSpacing: 3,
                         ),
                         itemBuilder: (BuildContext context, int index) {
-                          return Column(
-                            children: [
-                              Hero(
-                                tag: '${selectedImages[index]}__heroTag',
+                          return InkWell(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    Home2(content: selectedImages),
+                              ),
+                            ),
+                            child: Center(
+                              child: Hero(
+                                tag: 'hlao',
                                 child: Image.file(
                                   height: double.infinity,
                                   selectedImages[index],
                                   fit: BoxFit.cover,
                                 ),
                               ),
-                              IconButton(
-                                  icon: Icon(Icons.navigate_next),
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => Home2()),
-                                    );
-                                  }),
-                            ],
+                            ),
                           );
                         },
                       ),
@@ -126,53 +126,32 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Home2 extends StatefulWidget {
-  const Home2({
-    super.key,
-  });
+  List<File> content;
+
+  Home2({Key? key, required this.content}) : super(key: key);
 
   @override
   State<Home2> createState() => _Home2State();
 }
 
 class _Home2State extends State<Home2> {
-  List<File> selectedImages = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF191E2C),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: SizedBox(
-              width: double.infinity, // To show images in particular area only
-              child: Padding(
-                padding: const EdgeInsets.all(10),
-                child: GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: selectedImages.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 1,
-                    mainAxisSpacing: 3,
-                    crossAxisSpacing: 3,
-                  ),
-                  itemBuilder: (BuildContext context, int index) {
-                    // TO show selected file
-                    return Center(
-                      child: Hero(
-                        tag: '__heroTag',
-                        child: Image.file(
-                          height: double.infinity,
-                          selectedImages[index],
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
+          for (var items in widget.content)
+            Center(
+              child: Hero(
+                tag: 'hlao',
+                child: Image.file(
+                  items,
+                  fit: BoxFit.contain,
                 ),
               ),
             ),
-          ),
         ],
       ),
     );
