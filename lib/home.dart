@@ -89,17 +89,15 @@ class _HomePageState extends State<HomePage> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) =>
-                                    Home2(content: selectedImages),
+                                    Home2(content: selectedImages[index]),
                               ),
                             ),
-                            child: Center(
-                              child: Hero(
-                                tag: 'hlao',
-                                child: Image.file(
-                                  height: double.infinity,
-                                  selectedImages[index],
-                                  fit: BoxFit.cover,
-                                ),
+                            child: Hero(
+                              tag: index,
+                              child: Image.file(
+                                height: double.infinity,
+                                selectedImages[index],
+                                fit: BoxFit.cover,
                               ),
                             ),
                           );
@@ -126,7 +124,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class Home2 extends StatefulWidget {
-  List<File> content;
+  File content;
 
   Home2({Key? key, required this.content}) : super(key: key);
 
@@ -140,18 +138,23 @@ class _Home2State extends State<Home2> {
     return Scaffold(
       backgroundColor: const Color(0xFF191E2C),
       body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          for (var items in widget.content)
-            Center(
-              child: Hero(
-                tag: 'hlao',
-                child: Image.file(
-                  items,
-                  fit: BoxFit.contain,
-                ),
-              ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: 1,
+              shrinkWrap: true,
+              physics: const BouncingScrollPhysics(),
+              itemBuilder: (BuildContext context, int index) {
+                return Hero(
+                  tag: index,
+                  child: Image.file(
+                    widget.content,
+                    fit: BoxFit.cover,
+                  ),
+                );
+              },
             ),
+          ),
         ],
       ),
     );
