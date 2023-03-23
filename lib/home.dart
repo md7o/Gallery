@@ -16,9 +16,10 @@ class _HomePageState extends State<HomePage> {
 
   Future getImages() async {
     final pickedFile = await _picker.pickMultiImage(
-        imageQuality: 100, // To set quality of images
-        maxHeight: 1000,
-        maxWidth: 1000);
+      imageQuality: 100, // To set quality of images
+      // maxHeight: 1000,
+      // maxWidth: 1000
+    );
     List<XFile> xfilePick = pickedFile;
     if (xfilePick.isNotEmpty) {
       for (var i = 0; i < xfilePick.length; i++) {
@@ -88,8 +89,9 @@ class _HomePageState extends State<HomePage> {
                             onTap: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    Home2(content: selectedImages[index]),
+                                builder: (context) => Home2(
+                                  content: selectedImages[index],
+                                ),
                               ),
                             ),
                             child: Hero(
@@ -134,28 +136,83 @@ class Home2 extends StatefulWidget {
 
 class _Home2State extends State<Home2> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+    BuildContext context,
+  ) {
     return Scaffold(
-      backgroundColor: const Color(0xFF191E2C),
+      backgroundColor: const Color(0x6C191E2C),
+      appBar: AppBar(backgroundColor: const Color(0xFF191E2C)),
       body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: 1,
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemBuilder: (BuildContext context, int index) {
-                return Hero(
-                  tag: index,
-                  child: Image.file(
-                    widget.content,
-                    fit: BoxFit.cover,
-                  ),
-                );
-              },
+          Center(
+            child: Image.file(
+              widget.content,
+              fit: BoxFit.cover,
             ),
-          ),
+          )
+          // Expanded(
+          //   child: ListView.builder(
+          //     itemCount: 1,
+          //     shrinkWrap: true,
+          //     physics: const BouncingScrollPhysics(),
+          //     itemBuilder: (BuildContext context, int index) {
+          //       return Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           Container(
+          //             child: Image.file(
+          //               widget.content,
+          //               fit: BoxFit.contain,
+          //             ),
+          //           ),
+          //         ],
+          //       );
+          //     },
+          //   ),
+          // ),
+          // for (final File in index)
         ],
+      ),
+      bottomNavigationBar: Theme(
+        data: ThemeData(
+          splashColor: Colors.transparent,
+          highlightColor: Colors.transparent,
+        ),
+        child: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(50)),
+            color: Color(0x00192836),
+          ),
+          child: BottomNavigationBar(
+            iconSize: 25,
+            elevation: 0,
+            backgroundColor: const Color(0xFF191E2C),
+            type: BottomNavigationBarType.fixed, //click effect
+            fixedColor: Colors.white,
+            unselectedItemColor: Colors.white,
+            showUnselectedLabels: false,
+            showSelectedLabels: false,
+            // currentIndex: currentIndex,
+            // onTap: (index) =>
+            //     setState(() => currentIndex = index),
+            items: const [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.share),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite_rounded),
+                label: '',
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.delete),
+                label: '',
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
